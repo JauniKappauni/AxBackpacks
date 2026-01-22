@@ -2,3 +2,5 @@ name: AxBackpacks
 version: '1.0.0'
 main: de.jauni.axbackpacks.AxBackpacks
 api-version: '1.21'
+commands:
+  backpack:

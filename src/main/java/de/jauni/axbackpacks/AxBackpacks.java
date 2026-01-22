@@ -1,6 +1,7 @@
 package de.jauni.axbackpacks;
 
 import de.jauni.axbackpacks.manager.DatabaseManager;
+import de.jauni.axbackpacks.manager.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,19 +14,29 @@ public final class AxBackpacks extends JavaPlugin {
         return databaseManager;
     }
 
+    PlayerManager playerManager;
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        try{
+        try {
             databaseManager = new DatabaseManager(this);
-            if(databaseManager.initDatabaseTable1() == false){
+            playerManager = new PlayerManager(this);
+            if (databaseManager.initDatabaseTable1() == false) {
                 getLogger().severe("Error creating backpacks table.");
                 Bukkit.getServer().shutdown();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        getCommand("backpack").setExecutor(new de.jauni.axbackpacks.command.BackpackCommand(this));
+        getServer().getPluginManager().registerEvents(new de.jauni.axbackpacks.listener.InventoryCloseListener(this), this);
+        getServer().getPluginManager().registerEvents(new de.jauni.axbackpacks.listener.PlayerJoinListener(this), this);
     }
 
     @Override
