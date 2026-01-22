@@ -1,0 +1,4 @@
+database:
+  url: jdbc:mysql://localhost/axbackpacks
+  username: root
+  password: ""
